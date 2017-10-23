@@ -9,7 +9,7 @@ var mongouri = 'mongodb://localhost:27017/notes';
   
 MongoClient.connect(mongouri, function(err, db){
   app.get('/notes', function (req, res){
-    db.collection('notes').find({}).sort({'date': -1}).toArray(function(err, docs){
+    db.collection('notes').find({}).toArray(function(err, docs){
       res.send(docs);
     });
 	});
