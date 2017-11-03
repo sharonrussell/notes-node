@@ -3,9 +3,14 @@ var express = require('express')
   MongoClient = require('mongodb').MongoClient,
   assert = require('assert'),
   ObjectId = require('mongodb').ObjectId;
+  var bodyParser = require('body-parser')
 
 var port = 3000;
 var mongouri = 'mongodb://mongo:27017/notes';
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
   
 MongoClient.connect(mongouri, function(err, db){
   // Add headers
@@ -40,6 +45,19 @@ MongoClient.connect(mongouri, function(err, db){
   app.post('/delete/:id', function (req, res) {
     var id = req.params.id;
     db.collection('notes').remove({"_id": ObjectId(id)});
+  });
+
+
+  app.post('/add', function(req, res, next) {
+    console.log(req)
+    var body = req.body.body;
+
+    if (body.length == 0) {
+        res.render('error', {error:'Please give a body'});
+    } else {
+        db.collection('notes').insertOne({"body" : body});
+        res.end();
+    }
   });
 });
 
