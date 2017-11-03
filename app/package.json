@@ -10,16 +10,18 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sharonrussell/notes-node.git"
   },
-  "author": "",
+  "author": "Sharon Russell",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/sharonrussell/notes-node/issues"
   },
-  "homepage": "https://github.com/sharonrussell/notes-node#readme"
+  "homepage": "https://github.com/sharonrussell/notes-node#readme",
+  "private": true
 }

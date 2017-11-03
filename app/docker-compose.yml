@@ -1,0 +1,21 @@
+version: "2"
+services:
+    mongo:
+        image: 'mongo:3.3.9'
+        container_name: 'mongo'
+        volumes:
+            - './db:/data/db'
+        networks:
+            - mongonetwork
+    app:
+        build: .
+        container_name: 'app-notes'
+        ports:
+            - "3000:3000"
+        networks: 
+            - mongonetwork
+networks:
+    mongonetwork:
+        driver: bridge
+        ipam: 
+            driver: default
