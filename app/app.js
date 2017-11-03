@@ -20,7 +20,7 @@ MongoClient.connect(mongouri, function(err, db){
 
   app.post('/delete/:id', function (req, res) {
     var id = req.params.id;
-    db.collection('entries').remove({"_id": ObjectId(id)});
+    db.collection('notes').remove({"_id": ObjectId(id)});
   });
 });
 
