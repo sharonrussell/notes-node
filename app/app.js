@@ -7,31 +7,21 @@ var express = require('express')
 
 var port = 3000;
 var mongouri = 'mongodb://mongo:27017/notes';
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+app.use( bodyParser.json() );       
+app.use(bodyParser.urlencoded({
   extended: true
 })); 
-  
+
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:8080');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  next();
+});  
+
 MongoClient.connect(mongouri, function(err, db){
-  // Add headers
-  app.use(function (req, res, next) {
-  
-      // Website you wish to allow to connect
-      res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:8080');
-  
-      // Request methods you wish to allow
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  
-      // Request headers you wish to allow
-      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  
-      // Set to true if you need the website to include cookies in the requests sent
-      // to the API (e.g. in case you use sessions)
-      res.setHeader('Access-Control-Allow-Credentials', true);
-  
-      // Pass to next layer of middleware
-      next();
-  });
 
   app.get('/notes', function (req, res){
     db.collection('notes').find({}).toArray(function(err, docs){
@@ -47,11 +37,8 @@ MongoClient.connect(mongouri, function(err, db){
     db.collection('notes').remove({"_id": ObjectId(id)});
   });
 
-
   app.post('/add', function(req, res, next) {
-    console.log(req)
     var body = req.body.body;
-
     if (body.length == 0) {
         res.render('error', {error:'Please give a body'});
     } else {
